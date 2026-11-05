@@ -55,8 +55,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
     (typeof window !== "undefined"
       ? localStorage.getItem("routecast_mapbox_token")
       : null) ||
-    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-    DEFAULT_MAPBOX_TOKEN;
+    "";
 
   // Initialize Mapbox map with Light theme
   useEffect(() => {

@@ -30,8 +30,8 @@ export async function fetchRouteAlternatives(params: {
 
   const token =
     mapboxToken ||
+    process.env.MAPBOX_ACCESS_TOKEN ||
     process.env.MAPBOX_SECRET_TOKEN ||
-    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
     DEFAULT_MAPBOX_TOKEN;
 
   // Try Mapbox Directions API if token is available

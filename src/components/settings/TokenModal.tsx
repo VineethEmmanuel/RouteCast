@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { Key, Check, ExternalLink, X } from "lucide-react";
 import { Button } from "../ui/Button";
-import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 
 interface TokenModalProps {
   isOpen: boolean;
@@ -20,10 +19,28 @@ export const TokenModal: React.FC<TokenModalProps> = ({
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored =
-        localStorage.getItem("routecast_mapbox_token") || DEFAULT_MAPBOX_TOKEN;
-      setTokenInput(stored);
+    const fetchCurrent = async () => {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("routecast_mapbox_token");
+        if (stored) {
+          setTokenInput(stored);
+          return;
+        }
+      }
+      try {
+        const res = await fetch("/api/config");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.mapboxToken) {
+            setTokenInput(data.mapboxToken);
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    if (isOpen) {
+      fetchCurrent();
     }
   }, [isOpen]);
 
@@ -81,7 +98,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
             </p>
             <p>
               You can get a free token from your Mapbox account. When running locally, set{" "}
-              <code className="text-[#087E8B] bg-white px-1 py-0.5 rounded border border-[#E7EBEF]">NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN</code> in{" "}
+              <code className="text-[#087E8B] bg-white px-1 py-0.5 rounded border border-[#E7EBEF]">MAPBOX_ACCESS_TOKEN</code> in{" "}
               <code className="text-[#087E8B] bg-white px-1 py-0.5 rounded border border-[#E7EBEF]">.env.local</code>.
             </p>
             <a

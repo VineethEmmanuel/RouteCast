@@ -167,7 +167,7 @@ WeatherWeb/
    ```
    Add your public Mapbox access token:
    ```env
-   NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieW91cnVzZXJuYW1lIi...
+   MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoieW91cnVzZXJuYW1lIi...
    MAPBOX_SECRET_TOKEN=
    ```
    *(Note: You can also enter your Mapbox token directly in the UI using the "Mapbox Token" button in the header).*
@@ -272,7 +272,7 @@ RouteCast is fully architected for serverless deployment on Vercel:
    - Log into [Vercel](https://vercel.com) and click **"Add New Project"**.
    - Import your repository.
    - In **Environment Variables**, add:
-     - `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`: Your Mapbox public access token.
+     - `MAPBOX_ACCESS_TOKEN`: Your Mapbox access token (kept private on server).
      - `MAPBOX_SECRET_TOKEN` (Optional): Server token if routing restrictions apply.
    - Click **Deploy**.
 
@@ -283,7 +283,7 @@ RouteCast is fully architected for serverless deployment on Vercel:
 
 ## 🔒 Security & Performance Best Practices
 
-- **Zero API Key Leakage:** Open-Meteo requires no secret keys. Mapbox tokens are kept either strictly server-side or scoped via `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` for client vector rendering.
+- **Zero API Key Leakage:** Open-Meteo requires no secret keys. Mapbox tokens are kept strictly server-side via `MAPBOX_ACCESS_TOKEN` and served securely via backend session endpoint.
 - **Batched Network Calls:** Multi-location querying aggregates all route checkpoint coordinates into single requests, reducing network calls by over 90%.
 - **Zero Mock Fallback:** When live external APIs encounter limits or when time falls outside the 14-day forecast horizon, RouteCast explicitly informs the user with transparent status indicators rather than faking data.
 

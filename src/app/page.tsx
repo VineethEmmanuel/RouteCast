@@ -19,7 +19,6 @@ import {
   SamplingIntervalMiles,
   WeatherVariable,
 } from "@/types/routing";
-import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 import { AlertCircle } from "lucide-react";
 
 export default function DashboardPage() {
@@ -37,17 +36,35 @@ export default function DashboardPage() {
   const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
   const [isGuidelinesModalOpen, setIsGuidelinesModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"planner" | "history" | "guidelines">("planner");
-  const [mapboxToken, setMapboxToken] = useState<string>(DEFAULT_MAPBOX_TOKEN);
+  const [mapboxToken, setMapboxToken] = useState<string>("");
 
   // Presets from sidebar
   const [presetOrigin, setPresetOrigin] = useState<LocationPoint | null>(null);
   const [presetDestination, setPresetDestination] = useState<LocationPoint | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("routecast_mapbox_token") || DEFAULT_MAPBOX_TOKEN;
-      setMapboxToken(stored);
-    }
+    const initToken = async () => {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("routecast_mapbox_token");
+        if (stored && stored.trim().length > 0) {
+          setMapboxToken(stored.trim());
+          return;
+        }
+      }
+      try {
+        const res = await fetch("/api/config");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.mapboxToken) {
+            setMapboxToken(data.mapboxToken);
+          }
+        }
+      } catch (err) {
+        console.warn("Server config fetch error:", err);
+      }
+    };
+
+    initToken();
   }, []);
 
   const handleAnalyze = async (params: {

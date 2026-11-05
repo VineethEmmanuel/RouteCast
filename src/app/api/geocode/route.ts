@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
 
     const q = parsed.data.q.trim();
     const mapboxToken =
+      process.env.MAPBOX_ACCESS_TOKEN ||
       process.env.MAPBOX_SECRET_TOKEN ||
-      process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
       DEFAULT_MAPBOX_TOKEN;
 
     // 1. Try Mapbox Geocoding if token is available
