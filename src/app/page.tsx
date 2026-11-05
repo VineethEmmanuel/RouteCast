@@ -19,6 +19,7 @@ import {
   SamplingIntervalMiles,
   WeatherVariable,
 } from "@/types/routing";
+import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 import { AlertCircle } from "lucide-react";
 
 export default function DashboardPage() {
@@ -36,7 +37,7 @@ export default function DashboardPage() {
   const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
   const [isGuidelinesModalOpen, setIsGuidelinesModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"planner" | "history" | "guidelines">("planner");
-  const [mapboxToken, setMapboxToken] = useState<string>("");
+  const [mapboxToken, setMapboxToken] = useState<string>(DEFAULT_MAPBOX_TOKEN);
 
   // Presets from sidebar
   const [presetOrigin, setPresetOrigin] = useState<LocationPoint | null>(null);
@@ -44,7 +45,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("routecast_mapbox_token") || "";
+      const stored = localStorage.getItem("routecast_mapbox_token") || DEFAULT_MAPBOX_TOKEN;
       setMapboxToken(stored);
     }
   }, []);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 
 const querySchema = z.object({
   q: z.string().min(2, "Query must be at least 2 characters"),
@@ -20,7 +21,9 @@ export async function GET(req: NextRequest) {
 
     const q = parsed.data.q.trim();
     const mapboxToken =
-      process.env.MAPBOX_SECRET_TOKEN || process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+      process.env.MAPBOX_SECRET_TOKEN ||
+      process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
+      DEFAULT_MAPBOX_TOKEN;
 
     // 1. Try Mapbox Geocoding if token is available
     if (mapboxToken && mapboxToken.trim().length > 0) {

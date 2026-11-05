@@ -12,6 +12,7 @@ import {
 } from "@/types/routing";
 import { Key, Maximize2, AlertCircle } from "lucide-react";
 import { classifyWindRisk, classifyRainRisk, classifySnowRisk } from "@/lib/risk/classifier";
+import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 
 interface RouteMapProps {
   routes: EvaluatedRoute[];
@@ -55,7 +56,7 @@ export const RouteMap: React.FC<RouteMapProps> = ({
       ? localStorage.getItem("routecast_mapbox_token")
       : null) ||
     process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-    "";
+    DEFAULT_MAPBOX_TOKEN;
 
   // Initialize Mapbox map with Light theme
   useEffect(() => {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Key, Check, ExternalLink, X } from "lucide-react";
 import { Button } from "../ui/Button";
+import { DEFAULT_MAPBOX_TOKEN } from "@/lib/constants";
 
 interface TokenModalProps {
   isOpen: boolean;
@@ -20,7 +21,8 @@ export const TokenModal: React.FC<TokenModalProps> = ({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("routecast_mapbox_token") || "";
+      const stored =
+        localStorage.getItem("routecast_mapbox_token") || DEFAULT_MAPBOX_TOKEN;
       setTokenInput(stored);
     }
   }, [isOpen]);
