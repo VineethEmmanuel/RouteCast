@@ -35,3 +35,4 @@ export function formatHourOnly(isoString: string): string {
     hour12: true,
   });
 }
+

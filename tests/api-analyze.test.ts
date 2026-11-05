@@ -133,3 +133,4 @@ describe("End-to-End Pipeline Logic Integration", () => {
     expect(recommendation.explanation).toContain("Route 2 (via US-41) is recommended because it has 0.0 severe-risk miles");
   });
 });
+

@@ -1,22 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Checkpoint,
-  RiskLevel,
-  RISK_SCORE_MAP,
-} from "@/types/routing";
+import { Checkpoint } from "@/types/routing";
 import { RiskBadge } from "../ui/Badge";
 import { formatDateTime, cn } from "@/lib/utils";
-import {
-  Wind,
-  Droplets,
-  CloudSnow,
-  Filter,
-  AlertTriangle,
-  ChevronRight,
-  Search,
-} from "lucide-react";
+import { ChevronRight, Search, AlertTriangle } from "lucide-react";
 
 interface CheckpointTableProps {
   checkpoints: Checkpoint[];
@@ -35,7 +23,6 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
   if (!checkpoints || checkpoints.length === 0) return null;
 
   const filteredCheckpoints = checkpoints.filter((cp) => {
-    // Risk filter
     if (filter === "severe-plus") {
       if (cp.risk.finalRisk !== "Severe" && cp.risk.finalRisk !== "No Travel") return false;
     } else if (filter === "high-plus") {
@@ -49,7 +36,6 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
       if (cp.risk.finalRisk === "Low") return false;
     }
 
-    // Search filter
     if (searchTerm.trim().length > 0) {
       const term = searchTerm.toLowerCase();
       const matchIndex = cp.index.toString().includes(term);
@@ -63,41 +49,52 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
   });
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-xl space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="rounded-lg border border-[#E7EBEF] bg-white p-4 shadow-subtle space-y-3">
+      {/* Table Header Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div>
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <span>Corridor Weather Checkpoints & Milepost Log</span>
-            <span className="text-xs font-mono font-normal text-slate-400">
-              ({filteredCheckpoints.length} of {checkpoints.length} Checkpoints)
-            </span>
+          <h3 className="text-xs font-semibold text-[#17212B]">
+            Corridor Milepost & Weather Checkpoint Log
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Click any checkpoint to pan and view meteorological breakdown.
+          <p className="text-[11px] text-[#687582]">
+            Showing {filteredCheckpoints.length} of {checkpoints.length} sampled points. Click row to zoom on map.
           </p>
         </div>
 
-        {/* Filter Controls */}
+        {/* Filter Controls & Search */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs">
+          {/* Quick Search */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Filter checkpoints..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="h-7 w-36 rounded-md border border-[#E7EBEF] bg-white pl-2 pr-6 text-xs text-[#17212B] placeholder:text-[#9DA7B2] focus:border-[#087E8B] focus:ring-1 focus:ring-[#087E8B] focus:outline-none"
+            />
+            <Search className="absolute right-2 top-2 h-3 w-3 text-[#9DA7B2]" />
+          </div>
+
+          {/* Segmented Filter */}
+          <div className="flex items-center rounded-md bg-[#F4F5F7] p-0.5 border border-[#E7EBEF] text-xs">
             <button
               onClick={() => setFilter("all")}
               className={cn(
-                "px-2.5 py-1 rounded-lg font-medium transition-colors",
+                "px-2 py-0.5 rounded text-[11px] font-medium transition-colors",
                 filter === "all"
-                  ? "bg-cyan-500/20 text-cyan-300 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-white text-[#17212B] font-semibold shadow-subtle"
+                  : "text-[#687582] hover:text-[#17212B]"
               )}
             >
-              All ({checkpoints.length})
+              All
             </button>
             <button
               onClick={() => setFilter("affected")}
               className={cn(
-                "px-2.5 py-1 rounded-lg font-medium transition-colors",
+                "px-2 py-0.5 rounded text-[11px] font-medium transition-colors",
                 filter === "affected"
-                  ? "bg-amber-500/20 text-amber-300 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-white text-[#A07010] font-semibold shadow-subtle"
+                  : "text-[#687582] hover:text-[#17212B]"
               )}
             >
               Mod+
@@ -105,10 +102,10 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
             <button
               onClick={() => setFilter("high-plus")}
               className={cn(
-                "px-2.5 py-1 rounded-lg font-medium transition-colors",
+                "px-2 py-0.5 rounded text-[11px] font-medium transition-colors",
                 filter === "high-plus"
-                  ? "bg-orange-500/20 text-orange-300 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-white text-[#C25814] font-semibold shadow-subtle"
+                  : "text-[#687582] hover:text-[#17212B]"
               )}
             >
               High+
@@ -116,10 +113,10 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
             <button
               onClick={() => setFilter("severe-plus")}
               className={cn(
-                "px-2.5 py-1 rounded-lg font-medium transition-colors",
+                "px-2 py-0.5 rounded text-[11px] font-medium transition-colors",
                 filter === "severe-plus"
-                  ? "bg-red-500/20 text-red-300 font-bold"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-white text-[#B82E2E] font-semibold shadow-subtle"
+                  : "text-[#687582] hover:text-[#17212B]"
               )}
             >
               Severe+
@@ -129,23 +126,23 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
       </div>
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-xl border border-slate-800/80">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-950/80 uppercase text-[10px] font-bold text-slate-400 border-b border-slate-800">
+      <div className="overflow-x-auto rounded-md border border-[#E7EBEF]">
+        <table className="w-full text-left text-xs text-[#17212B]">
+          <thead className="bg-[#F7F8FA] uppercase text-[10px] font-semibold text-[#687582] border-b border-[#E7EBEF] tracking-wider">
             <tr>
-              <th className="px-3.5 py-2.5">CP #</th>
-              <th className="px-3.5 py-2.5">Distance</th>
-              <th className="px-3.5 py-2.5">Estimated ETA</th>
-              <th className="px-3.5 py-2.5">Wind</th>
-              <th className="px-3.5 py-2.5">Rain</th>
-              <th className="px-3.5 py-2.5">Snow</th>
-              <th className="px-3.5 py-2.5">Temp</th>
-              <th className="px-3.5 py-2.5">Load Escalation</th>
-              <th className="px-3.5 py-2.5">Final Risk</th>
-              <th className="px-2 py-2.5"></th>
+              <th className="px-3 py-2">CP #</th>
+              <th className="px-3 py-2">Distance</th>
+              <th className="px-3 py-2">Estimated ETA</th>
+              <th className="px-3 py-2">Wind Speed</th>
+              <th className="px-3 py-2">Precipitation</th>
+              <th className="px-3 py-2">Snowfall</th>
+              <th className="px-3 py-2">Temp</th>
+              <th className="px-3 py-2">Load Rule</th>
+              <th className="px-3 py-2">Final Risk</th>
+              <th className="px-2 py-2"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 font-mono">
+          <tbody className="divide-y divide-[#F4F5F7] font-mono tabular-nums text-xs">
             {filteredCheckpoints.map((cp) => {
               const isSelected = selectedCheckpointId === cp.id;
 
@@ -154,66 +151,64 @@ export const CheckpointTable: React.FC<CheckpointTableProps> = ({
                   key={cp.id}
                   onClick={() => onSelectCheckpoint(cp)}
                   className={cn(
-                    "cursor-pointer transition-colors duration-150 hover:bg-slate-800/60",
-                    isSelected
-                      ? "bg-cyan-950/30 font-semibold"
-                      : "bg-slate-900/30"
+                    "cursor-pointer transition-colors duration-100 hover:bg-[#F7F8FA]",
+                    isSelected && "bg-[#E6F3F5] hover:bg-[#DBEEF1] font-semibold"
                   )}
                 >
-                  <td className="px-3.5 py-2.5 font-bold text-slate-200">
+                  <td className="px-3 py-2 font-semibold text-[#17212B]">
                     #{cp.index}
                   </td>
-                  <td className="px-3.5 py-2.5 font-bold text-cyan-300">
+                  <td className="px-3 py-2 text-[#087E8B] font-semibold">
                     {cp.distanceFromOriginMiles.toFixed(1)} mi
                   </td>
-                  <td className="px-3.5 py-2.5 text-slate-300">
+                  <td className="px-3 py-2 text-[#687582]">
                     {formatDateTime(cp.estimatedArrivalTime)}
                   </td>
-                  <td className="px-3.5 py-2.5">
+                  <td className="px-3 py-2">
                     <span
                       className={cn(
-                        cp.weather.windSpeed >= 35 ? "text-orange-400 font-bold" : "text-slate-300"
+                        cp.weather.windSpeed >= 35 ? "text-[#C25814] font-semibold" : "text-[#17212B]"
                       )}
                     >
                       {cp.weather.windSpeed.toFixed(1)} mph
                     </span>
                   </td>
-                  <td className="px-3.5 py-2.5">
+                  <td className="px-3 py-2">
                     <span
                       className={cn(
-                        cp.weather.precipitation >= 0.25 ? "text-blue-400 font-bold" : "text-slate-400"
+                        cp.weather.precipitation >= 0.25 ? "text-blue-600 font-semibold" : "text-[#687582]"
                       )}
                     >
                       {cp.weather.precipitation.toFixed(2)} in/h
                     </span>
                   </td>
-                  <td className="px-3.5 py-2.5">
+                  <td className="px-3 py-2">
                     <span
                       className={cn(
-                        cp.weather.snowfall >= 0.5 ? "text-sky-300 font-bold" : "text-slate-400"
+                        cp.weather.snowfall >= 0.5 ? "text-sky-600 font-semibold" : "text-[#687582]"
                       )}
                     >
                       {cp.weather.snowfall.toFixed(2)} in/h
                     </span>
                   </td>
-                  <td className="px-3.5 py-2.5 text-slate-300">
+                  <td className="px-3 py-2 text-[#17212B]">
                     {cp.weather.temperature.toFixed(0)}°F
                   </td>
-                  <td className="px-3.5 py-2.5 text-[11px] font-sans">
+                  <td className="px-3 py-2 font-sans text-[11px]">
                     {cp.risk.loadAdjustmentApplied ? (
-                      <span className="inline-flex items-center gap-1 rounded bg-red-500/20 px-1.5 py-0.5 text-red-300 text-[10px] border border-red-500/40">
-                        <AlertTriangle className="h-3 w-3" />
-                        Rule Triggered
+                      <span className="inline-flex items-center gap-1 rounded bg-[#FCEEEE] border border-[#F5C2C2] px-1.5 py-0.5 text-[#B82E2E] text-[10px] font-medium">
+                        <AlertTriangle className="h-2.5 w-2.5" />
+                        Adjusted
                       </span>
                     ) : (
-                      <span className="text-slate-400">—</span>
+                      <span className="text-[#D4D9DE]">—</span>
                     )}
                   </td>
-                  <td className="px-3.5 py-2.5">
+                  <td className="px-3 py-2 font-sans">
                     <RiskBadge risk={cp.risk.finalRisk} size="sm" />
                   </td>
-                  <td className="px-2 py-2.5 text-slate-500">
-                    <ChevronRight className="h-3.5 w-3.5" />
+                  <td className="px-2 py-2 text-[#9DA7B2]">
+                    <ChevronRight className="h-3 w-3" />
                   </td>
                 </tr>
               );

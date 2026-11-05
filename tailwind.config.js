@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,62 +8,49 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        brand: {
-          navy: "#0a0f1d",
-          surface: "#0f172a",
-          card: "#131e36",
-          cardHover: "#182645",
-          border: "#1e293b",
-          borderActive: "#334155",
-          cyan: "#06b6d4",
-          teal: "#14b8a6",
-          sky: "#38bdf8",
+        app: {
+          bg: "#F7F8FA",
+          surface: "#FFFFFF",
+          subtle: "#F4F5F7",
+          border: "#E7EBEF",
+          borderHover: "#D4D9DE",
+          text: "#17212B",
+          muted: "#687582",
+          faint: "#9DA7B2",
+          accent: "#087E8B",
+          accentDark: "#075B65",
+          accentLight: "#E6F3F5",
         },
         risk: {
-          low: "#10b981",        // Green
-          moderate: "#eab308",   // Yellow
-          high: "#f97316",       // Orange
-          severe: "#ef4444",     // Red
-          noTravel: "#991b1b",   // Dark Red
+          low: "#16865D",
+          lowBg: "#EBF6F1",
+          moderate: "#D69B24",
+          moderateBg: "#FDF6E7",
+          high: "#E47B35",
+          highBg: "#FDF1E9",
+          severe: "#D94B4B",
+          severeBg: "#FCEEEE",
+          noTravel: "#861F2D",
+          noTravelBg: "#F8E9EB",
         },
       },
+      fontFamily: {
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["var(--font-mono)", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+      },
+      boxShadow: {
+        subtle: "0 1px 2px 0 rgba(16, 24, 40, 0.04)",
+        card: "0 1px 3px 0 rgba(16, 24, 40, 0.06), 0 1px 2px -1px rgba(16, 24, 40, 0.06)",
+        dropdown: "0 4px 20px -2px rgba(16, 24, 40, 0.1), 0 2px 6px -2px rgba(16, 24, 40, 0.06)",
+        modal: "0 20px 40px -8px rgba(16, 24, 40, 0.16)",
+      },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        DEFAULT: "6px",
+        sm: "4px",
+        md: "6px",
+        lg: "8px",
+        xl: "12px",
+        "2xl": "16px",
       },
     },
   },

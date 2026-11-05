@@ -123,3 +123,4 @@ describe("Route Risk Aggregation & Distance Allocation", () => {
     expect(result.riskProfile.incompleteDistanceMiles).toBeGreaterThan(0);
   });
 });
+

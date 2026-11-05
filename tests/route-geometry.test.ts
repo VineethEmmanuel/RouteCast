@@ -104,3 +104,4 @@ describe("Route Geometry & Checkpoint Processing", () => {
     expect(res10.checkpoints.length).toBeGreaterThan(res50.checkpoints.length);
   });
 });
+

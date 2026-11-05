@@ -2,17 +2,13 @@
 
 import React from "react";
 import {
-  Sparkles,
   ShieldCheck,
   ShieldAlert,
-  ArrowRight,
-  TrendingUp,
   BarChart3,
-  Clock,
   Compass,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
-import { EvaluatedRoute, RISK_COLORS, RouteAnalysisResult } from "@/types/routing";
+import { RouteAnalysisResult } from "@/types/routing";
 import { formatDuration, formatDistanceMiles, cn } from "@/lib/utils";
 
 interface RouteExplainabilityCardProps {
@@ -26,78 +22,83 @@ export const RouteExplainabilityCard: React.FC<RouteExplainabilityCardProps> = (
   const recommendedRoute = routes.find((r) => r.id === recommendedRouteId);
 
   return (
-    <Card className="border-teal-500/30 bg-gradient-to-br from-slate-900/90 via-slate-900/70 to-teal-950/20 shadow-2xl">
-      <CardHeader className="pb-3 border-teal-500/20">
+    <Card className="border-[#E7EBEF] bg-white shadow-subtle">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-bold flex items-center gap-2 text-white">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-400">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            <span>Intelligent Dispatch Recommendation & Explainability</span>
+          <CardTitle className="text-sm font-semibold flex items-center gap-2 text-[#17212B]">
+            <Compass className="h-4 w-4 text-[#087E8B]" />
+            <span>Dispatch Recommendation & Exposure Analysis</span>
           </CardTitle>
 
           <span
             className={cn(
-              "px-3 py-1 rounded-full text-xs font-bold border",
+              "px-2.5 py-0.5 rounded-[4px] text-xs font-medium border",
               hasSafeRoute
-                ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
-                : "bg-rose-950/60 text-rose-300 border-rose-600/50"
+                ? "bg-[#EBF6F1] text-[#16865D] border-[#CBE9DC]"
+                : "bg-[#F8E9EB] text-[#861F2D] border-[#E5B5BC]"
             )}
           >
-            {hasSafeRoute ? "Safe Route Identified" : "Critical Advisory"}
+            {hasSafeRoute ? "Safe Route Identified" : "Critical Weather Advisory"}
           </span>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-5 pt-3">
-        {/* Dynamic Natural Language Justification */}
-        <div className="rounded-xl border border-slate-700/80 bg-slate-950/70 p-4 shadow-inner">
-          <div className="flex items-start gap-3">
+      <CardContent className="space-y-4 pt-3">
+        {/* Recommendation Callout */}
+        <div
+          className={cn(
+            "rounded-md border p-3.5",
+            hasSafeRoute
+              ? "bg-[#E6F3F5] border-[#BCE1E5]"
+              : "bg-[#F8E9EB] border-[#E5B5BC]"
+          )}
+        >
+          <div className="flex items-start gap-2.5">
             {hasSafeRoute ? (
-              <ShieldCheck className="h-5 w-5 text-teal-400 mt-0.5 flex-shrink-0" />
+              <ShieldCheck className="h-4 w-4 text-[#087E8B] mt-0.5 flex-shrink-0" />
             ) : (
-              <ShieldAlert className="h-5 w-5 text-rose-400 mt-0.5 flex-shrink-0" />
+              <ShieldAlert className="h-4 w-4 text-[#861F2D] mt-0.5 flex-shrink-0" />
             )}
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-slate-100">
+              <h4 className="text-xs font-semibold text-[#17212B]">
                 {hasSafeRoute && recommendedRoute
-                  ? `Recommended: ${recommendedRoute.name}`
-                  : "Dispatch Warning: Hazardous Conditions Detected"}
+                  ? `Recommended Choice: ${recommendedRoute.name}`
+                  : "Dispatch Warning: Extreme Weather Hazards Detected"}
               </h4>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+              <p className="text-xs text-[#687582] leading-relaxed">
                 {recommendationExplanation}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Route Risk Mileage Distribution Bar Chart */}
+        {/* Hazard Exposure Stacked Bars */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <BarChart3 className="h-3.5 w-3.5 text-cyan-400" />
-              Route Hazard Exposure Distribution (Miles by Category)
+            <span className="text-xs font-medium text-[#687582] flex items-center gap-1.5">
+              <BarChart3 className="h-3.5 w-3.5 text-[#9DA7B2]" />
+              Corridor Hazard Mileage Breakdown
             </span>
-            <div className="flex items-center gap-2 text-[10px] text-slate-400">
+            <div className="flex items-center gap-2.5 text-[11px] text-[#687582]">
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" /> Low
+                <span className="h-2 w-2 rounded-full bg-[#16865D]" /> Low
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-amber-500" /> Mod
+                <span className="h-2 w-2 rounded-full bg-[#D69B24]" /> Mod
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-orange-500" /> High
+                <span className="h-2 w-2 rounded-full bg-[#E47B35]" /> High
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-red-500" /> Severe
+                <span className="h-2 w-2 rounded-full bg-[#D94B4B]" /> Severe
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-rose-700" /> No Travel
+                <span className="h-2 w-2 rounded-full bg-[#861F2D]" /> No Travel
               </span>
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {routes.map((route) => {
               const p = route.riskProfile;
               const total = Math.max(p.totalMiles, 1);
@@ -111,54 +112,54 @@ export const RouteExplainabilityCard: React.FC<RouteExplainabilityCardProps> = (
               return (
                 <div key={route.id} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-slate-200 flex items-center gap-2">
+                    <span className="font-medium text-[#17212B] flex items-center gap-2">
                       <span>{route.name}</span>
                       {route.isRecommended && (
-                        <span className="text-[10px] bg-teal-500/20 text-teal-300 px-1.5 py-0.2 rounded border border-teal-500/40">
-                          Best
+                        <span className="text-[10px] bg-[#E6F3F5] text-[#087E8B] px-1.5 py-0.2 rounded border border-[#BCE1E5] font-semibold">
+                          Optimal
                         </span>
                       )}
                     </span>
-                    <span className="font-mono text-slate-400">
+                    <span className="font-mono tabular-nums text-xs text-[#687582]">
                       {formatDistanceMiles(route.totalDistanceMiles)} • {formatDuration(route.totalDurationMinutes)}
                     </span>
                   </div>
 
                   {/* Stacked bar */}
-                  <div className="h-4 w-full rounded-md bg-slate-950 overflow-hidden flex border border-slate-800">
+                  <div className="h-3 w-full rounded-[4px] bg-[#F4F5F7] overflow-hidden flex border border-[#E7EBEF]">
                     {lowPct > 0 && (
                       <div
                         style={{ width: `${lowPct}%` }}
                         title={`Low Risk: ${p.lowRiskMiles} mi (${lowPct.toFixed(0)}%)`}
-                        className="h-full bg-emerald-500 hover:opacity-90 transition-opacity"
+                        className="h-full bg-[#16865D] hover:opacity-90 transition-opacity"
                       />
                     )}
                     {modPct > 0 && (
                       <div
                         style={{ width: `${modPct}%` }}
                         title={`Moderate Risk: ${p.moderateRiskMiles} mi (${modPct.toFixed(0)}%)`}
-                        className="h-full bg-amber-500 hover:opacity-90 transition-opacity"
+                        className="h-full bg-[#D69B24] hover:opacity-90 transition-opacity"
                       />
                     )}
                     {highPct > 0 && (
                       <div
                         style={{ width: `${highPct}%` }}
                         title={`High Risk: ${p.highRiskMiles} mi (${highPct.toFixed(0)}%)`}
-                        className="h-full bg-orange-500 hover:opacity-90 transition-opacity"
+                        className="h-full bg-[#E47B35] hover:opacity-90 transition-opacity"
                       />
                     )}
                     {sevPct > 0 && (
                       <div
                         style={{ width: `${sevPct}%` }}
                         title={`Severe Risk: ${p.severeRiskMiles} mi (${sevPct.toFixed(0)}%)`}
-                        className="h-full bg-red-600 hover:opacity-90 transition-opacity"
+                        className="h-full bg-[#D94B4B] hover:opacity-90 transition-opacity"
                       />
                     )}
                     {noTrvPct > 0 && (
                       <div
                         style={{ width: `${noTrvPct}%` }}
                         title={`No Travel Risk: ${p.noTravelMiles} mi (${noTrvPct.toFixed(0)}%)`}
-                        className="h-full bg-rose-900 hover:opacity-90 transition-opacity animate-pulse"
+                        className="h-full bg-[#861F2D] hover:opacity-90 transition-opacity"
                       />
                     )}
                   </div>
@@ -168,15 +169,9 @@ export const RouteExplainabilityCard: React.FC<RouteExplainabilityCardProps> = (
           </div>
         </div>
 
-        {/* Priority Hierarchy Decision Guide */}
-        <div className="rounded-xl border border-slate-800/90 bg-slate-950/40 p-3 text-xs text-slate-400">
-          <div className="font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-            <Compass className="h-3.5 w-3.5 text-cyan-400" />
-            Decision Engine Priority Hierarchy (Lexicographical Assessment)
-          </div>
-          <p className="leading-relaxed">
-            1. <strong>No-Travel Exclusion</strong> (Immediate hazard disqualification) → 2. <strong>Fewest Severe Miles</strong> → 3. <strong>Fewest High-Risk Miles</strong> → 4. <strong>Lowest Average Risk</strong> → 5. <strong>Shortest Travel Time</strong>.
-          </p>
+        {/* Priority Order Footnote */}
+        <div className="rounded-md bg-[#F7F8FA] border border-[#E7EBEF] p-2.5 text-[11px] text-[#687582] leading-relaxed">
+          <strong className="text-[#17212B]">Decision Hierarchy:</strong> 1. No-Travel Exclusion → 2. Fewest Severe Miles → 3. Fewest High Miles → 4. Lowest Average Risk Score → 5. Shortest Travel Duration.
         </div>
       </CardContent>
     </Card>

@@ -173,3 +173,4 @@ export function evaluateCheckpointRisk(params: {
 function RIS_SCORE(r: RiskLevel): number {
   return RISK_SCORE_MAP[r];
 }
+

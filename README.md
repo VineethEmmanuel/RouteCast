@@ -286,3 +286,4 @@ RouteCast is fully architected for serverless deployment on Vercel:
 - **Zero API Key Leakage:** Open-Meteo requires no secret keys. Mapbox tokens are kept either strictly server-side or scoped via `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN` for client vector rendering.
 - **Batched Network Calls:** Multi-location querying aggregates all route checkpoint coordinates into single requests, reducing network calls by over 90%.
 - **Zero Mock Fallback:** When live external APIs encounter limits or when time falls outside the 14-day forecast horizon, RouteCast explicitly informs the user with transparent status indicators rather than faking data.
+

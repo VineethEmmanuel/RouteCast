@@ -12,40 +12,43 @@ export const RISK_SCORE_MAP: Record<RiskLevel, number> = {
 
 export const RISK_LEVEL_ORDER: RiskLevel[] = ["Low", "Moderate", "High", "Severe", "No Travel"];
 
-export const RISK_COLORS: Record<RiskLevel, { hex: string; bg: string; text: string; border: string; label: string }> = {
+export const RISK_COLORS: Record<
+  RiskLevel,
+  { hex: string; bg: string; text: string; border: string; label: string }
+> = {
   "Low": {
-    hex: "#10b981",
-    bg: "bg-emerald-500/15",
-    text: "text-emerald-400",
-    border: "border-emerald-500/30",
+    hex: "#16865D",
+    bg: "bg-[#EBF6F1]",
+    text: "text-[#16865D]",
+    border: "border-[#CBE9DC]",
     label: "Low Risk",
   },
   "Moderate": {
-    hex: "#eab308",
-    bg: "bg-amber-500/15",
-    text: "text-amber-400",
-    border: "border-amber-500/30",
+    hex: "#D69B24",
+    bg: "bg-[#FDF6E7]",
+    text: "text-[#A07010]",
+    border: "border-[#F7DFAC]",
     label: "Moderate Risk",
   },
   "High": {
-    hex: "#f97316",
-    bg: "bg-orange-500/15",
-    text: "text-orange-400",
-    border: "border-orange-500/30",
+    hex: "#E47B35",
+    bg: "bg-[#FDF1E9]",
+    text: "text-[#C25814]",
+    border: "border-[#F8D2BA]",
     label: "High Risk",
   },
   "Severe": {
-    hex: "#ef4444",
-    bg: "bg-red-500/15",
-    text: "text-red-400",
-    border: "border-red-500/30",
+    hex: "#D94B4B",
+    bg: "bg-[#FCEEEE]",
+    text: "text-[#B82E2E]",
+    border: "border-[#F5C2C2]",
     label: "Severe Risk",
   },
   "No Travel": {
-    hex: "#991b1b",
-    bg: "bg-rose-950/40",
-    text: "text-rose-400",
-    border: "border-rose-600/50",
+    hex: "#861F2D",
+    bg: "bg-[#F8E9EB]",
+    text: "text-[#861F2D]",
+    border: "border-[#E5B5BC]",
     label: "No Travel Advisory",
   },
 };
@@ -83,7 +86,6 @@ export interface Checkpoint {
   travelTimeMinutes: number;
   weather: CheckpointWeather;
   risk: CheckpointRisk;
-  // Weather timeline across 48h from departure for the interactive forecast slider
   timeline48h?: Array<{
     offsetHours: number;
     timestamp: string;

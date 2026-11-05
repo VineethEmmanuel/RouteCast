@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface RiskBadgeProps {
   risk: RiskLevel;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md";
 }
 
 export const RiskBadge: React.FC<RiskBadgeProps> = ({
@@ -16,15 +16,14 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
   const meta = RISK_COLORS[risk] || RISK_COLORS["Low"];
 
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-xs font-medium",
-    md: "px-2.5 py-1 text-xs font-semibold",
-    lg: "px-3 py-1.5 text-sm font-semibold",
+    sm: "px-2 py-0.5 text-[11px] leading-tight",
+    md: "px-2.5 py-1 text-xs leading-tight font-medium",
   };
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border shadow-sm transition-colors",
+        "inline-flex items-center gap-1.5 rounded-[4px] border font-medium select-none tracking-tight",
         meta.bg,
         meta.text,
         meta.border,
@@ -33,10 +32,10 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
       )}
     >
       <span
-        className="h-1.5 w-1.5 rounded-full animate-pulse"
+        className="h-1.5 w-1.5 rounded-full flex-shrink-0"
         style={{ backgroundColor: meta.hex }}
       />
-      {risk}
+      <span>{risk}</span>
     </span>
   );
 };

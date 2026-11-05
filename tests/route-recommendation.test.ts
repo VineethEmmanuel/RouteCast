@@ -126,3 +126,4 @@ describe("Route Recommendation Engine — Lexicographical Priority", () => {
     expect(outcome.explanation).toContain("No fully safe route is available");
   });
 });
+

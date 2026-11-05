@@ -13,7 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RouteCast | Weather-Aware Truck Routing Platform",
+  title: "RouteCast — Weather-Aware Logistics & Truck Routing",
   description:
     "Intelligent weather-aware logistics platform evaluating wind speed, rainfall, snowfall, and truck cargo weight for optimal fleet safety.",
 };
@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#080d1a] text-slate-100 min-h-screen antialiased selection:bg-cyan-500 selection:text-slate-950`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#F7F8FA] text-[#17212B] min-h-screen antialiased selection:bg-[#E6F3F5] selection:text-[#087E8B]`}
       >
         {children}
       </body>

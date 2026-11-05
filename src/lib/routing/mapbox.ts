@@ -112,3 +112,4 @@ export async function fetchRouteAlternatives(params: {
 
   throw new Error("Unable to locate driving paths between the specified origin and destination.");
 }
+

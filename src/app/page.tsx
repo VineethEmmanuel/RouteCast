@@ -19,7 +19,7 @@ import {
   SamplingIntervalMiles,
   WeatherVariable,
 } from "@/types/routing";
-import { AlertCircle, Compass, Sparkles } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 export default function DashboardPage() {
   const [analysisResult, setAnalysisResult] = useState<RouteAnalysisResult | null>(null);
@@ -42,7 +42,6 @@ export default function DashboardPage() {
   const [presetOrigin, setPresetOrigin] = useState<LocationPoint | null>(null);
   const [presetDestination, setPresetDestination] = useState<LocationPoint | null>(null);
 
-  // Load client Mapbox token on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("routecast_mapbox_token") || "";
@@ -50,7 +49,6 @@ export default function DashboardPage() {
     }
   }, []);
 
-  // Run analysis handler
   const handleAnalyze = async (params: {
     origin: LocationPoint;
     destination: LocationPoint;
@@ -79,7 +77,6 @@ export default function DashboardPage() {
       }
 
       setAnalysisResult(data);
-      // Auto-select recommended route, or first route if none
       setSelectedRouteId(data.recommendedRouteId || (data.routes[0]?.id ?? null));
       setSelectedHourOffset(0);
     } catch (err: any) {
@@ -90,7 +87,7 @@ export default function DashboardPage() {
     }
   };
 
-  // Trigger initial analysis on mount (Chicago to Denver corridor)
+  // Initial analysis on mount (Chicago to Denver corridor)
   useEffect(() => {
     const initialDep = new Date(Date.now() + 30 * 60 * 1000).toISOString();
     handleAnalyze({
@@ -121,14 +118,13 @@ export default function DashboardPage() {
     });
   };
 
-  // Find currently selected route
   const currentRoute =
     analysisResult?.routes.find((r) => r.id === selectedRouteId) ||
     analysisResult?.routes[0] ||
     null;
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#080d1a]">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#F7F8FA]">
       {/* Sidebar */}
       <Sidebar
         onSelectPreset={handleSelectPreset}
@@ -150,11 +146,11 @@ export default function DashboardPage() {
         />
 
         {/* Dashboard Workspace */}
-        <main className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto w-full">
+        <main className="p-4 md:p-6 space-y-4 max-w-7xl mx-auto w-full">
           {/* Error Banner */}
           {errorMessage && (
-            <div className="flex items-center gap-3 rounded-2xl bg-red-500/10 border border-red-500/30 p-4 text-xs text-red-300 shadow-xl">
-              <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-400" />
+            <div className="flex items-center gap-2.5 rounded-md bg-[#FCEEEE] border border-[#F5C2C2] p-3 text-xs text-[#B82E2E] shadow-subtle">
+              <AlertCircle className="h-4 w-4 flex-shrink-0 text-[#D94B4B]" />
               <div className="flex-1">
                 <strong>Analysis Error:</strong> {errorMessage}
               </div>
@@ -170,16 +166,16 @@ export default function DashboardPage() {
           />
 
           {/* Section 2: Interactive Map & 48h Forecast Slider */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                <span>Interactive Corridor Map & Weather Heatmap</span>
-                {analysisResult && (
-                  <span className="text-xs font-mono font-normal text-cyan-400">
-                    ({analysisResult.samplingIntervalMiles} mi checkpoints)
-                  </span>
-                )}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-0.5">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#687582]">
+                Corridor Map & Weather Visualization
               </h2>
+              {analysisResult && (
+                <span className="text-xs font-mono tabular-nums text-[#687582]">
+                  {analysisResult.samplingIntervalMiles} mi checkpoints
+                </span>
+              )}
             </div>
 
             <RouteMap
@@ -245,7 +241,6 @@ export default function DashboardPage() {
         onTokenSaved={(newToken) => {
           setMapboxToken(newToken);
           if (analysisResult) {
-            // Re-run analysis with the new token
             handleAnalyze({
               origin: analysisResult.origin,
               destination: analysisResult.destination,

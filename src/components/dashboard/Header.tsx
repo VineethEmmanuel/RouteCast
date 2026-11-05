@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { CloudRain, Compass, Clock, Key, ShieldCheck, Activity } from "lucide-react";
+import { Key, Clock, ShieldCheck, Activity } from "lucide-react";
 import { Button } from "../ui/Button";
 
 interface HeaderProps {
@@ -22,7 +22,6 @@ export const Header: React.FC<HeaderProps> = ({
       const now = new Date();
       setCurrentDateTime(
         now.toLocaleString("en-US", {
-          weekday: "short",
           month: "short",
           day: "numeric",
           hour: "2-digit",
@@ -40,49 +39,46 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 bg-slate-950/60 px-6 py-4 backdrop-blur-md">
-      <div>
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-            <Compass className="h-4 w-4" />
-          </div>
-          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            Weather-Aware Route Planner
-            <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 text-[10px] font-semibold text-cyan-400 uppercase tracking-wider">
-              Fleet Grade
-            </span>
-          </h1>
-        </div>
-        <p className="mt-1 text-xs text-slate-400">
-          Evaluates real-time wind speeds, rainfall, snowfall & cargo weight thresholds across alternative corridors.
-        </p>
+    <header className="h-14 flex-shrink-0 flex items-center justify-between px-6 border-b border-[#E7EBEF] bg-white select-none">
+      <div className="flex items-center gap-3">
+        <h1 className="text-sm font-semibold tracking-tight text-[#17212B]">
+          Route Planner
+        </h1>
+        <span className="hidden sm:inline-block h-3.5 w-px bg-[#E7EBEF]" />
+        <span className="hidden sm:inline-block text-xs text-[#687582]">
+          Multi-corridor weather & load risk optimization
+        </span>
       </div>
 
-      <div className="flex items-center flex-wrap gap-3">
-        {/* Live system clock */}
-        <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs text-slate-300 font-mono shadow-sm">
-          <Clock className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />
-          <span>{currentDateTime || "Loading live clock..."}</span>
+      <div className="flex items-center gap-2.5">
+        {/* Tabular live clock */}
+        <div className="hidden md:flex items-center gap-1.5 text-xs text-[#687582] font-mono tabular-nums bg-[#F7F8FA] border border-[#E7EBEF] px-2.5 py-1 rounded-md">
+          <Clock className="h-3.5 w-3.5 text-[#9DA7B2]" />
+          <span>{currentDateTime || "Loading..."}</span>
         </div>
 
-        {/* Engine status indicator */}
-        <div className="hidden lg:flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs font-medium text-slate-300">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Weather: Open-Meteo Live</span>
-        </div>
+        {/* Routing Engine Badge */}
+        {routingEngine && (
+          <div className="hidden lg:flex items-center gap-1.5 text-xs text-[#687582] bg-[#F7F8FA] border border-[#E7EBEF] px-2.5 py-1 rounded-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#16865D]" />
+            <span className="uppercase text-[10px] font-semibold text-[#687582]">
+              {routingEngine === "mapbox" ? "Mapbox Engine" : "OSRM Routing"}
+            </span>
+          </div>
+        )}
 
         {/* Mapbox Token config button */}
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={onOpenSettings}
-          className="text-xs h-8 gap-1.5 border-slate-800 bg-slate-900 hover:border-slate-700"
+          className="h-8 gap-1.5 font-normal text-xs"
         >
-          <Key className="h-3.5 w-3.5 text-cyan-400" />
+          <Key className="h-3.5 w-3.5 text-[#687582]" />
           <span>Mapbox Token</span>
           <span
             className={`h-1.5 w-1.5 rounded-full ${
-              hasMapboxToken ? "bg-emerald-400" : "bg-amber-400"
+              hasMapboxToken ? "bg-[#16865D]" : "bg-[#D69B24]"
             }`}
           />
         </Button>

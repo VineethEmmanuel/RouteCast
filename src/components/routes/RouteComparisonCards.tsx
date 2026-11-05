@@ -2,15 +2,12 @@
 
 import React from "react";
 import {
-  Award,
   Clock,
   Navigation,
   ShieldCheck,
   ShieldAlert,
   AlertTriangle,
-  Flame,
-  CheckCircle2,
-  TrendingDown,
+  Award,
 } from "lucide-react";
 import { EvaluatedRoute, RISK_COLORS, RiskLevel } from "@/types/routing";
 import { formatDuration, formatDistanceMiles, cn } from "@/lib/utils";
@@ -22,6 +19,12 @@ interface RouteComparisonCardsProps {
   onSelectRoute: (routeId: string) => void;
 }
 
+const ROUTE_ACCENTS = {
+  1: { text: "text-[#087E8B]", bg: "bg-[#E6F3F5]", dot: "bg-[#087E8B]" },
+  2: { text: "text-[#4F46E5]", bg: "bg-[#EEF2FF]", dot: "bg-[#4F46E5]" },
+  3: { text: "text-[#475569]", bg: "bg-[#F1F5F9]", dot: "bg-[#475569]" },
+};
+
 export const RouteComparisonCards: React.FC<RouteComparisonCardsProps> = ({
   routes,
   selectedRouteId,
@@ -30,45 +33,38 @@ export const RouteComparisonCards: React.FC<RouteComparisonCardsProps> = ({
   if (!routes || routes.length === 0) return null;
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-          <span>Alternative Route Evaluations</span>
-          <span className="text-xs font-mono font-normal text-slate-500">
-            ({routes.length} Available)
-          </span>
+    <div className="space-y-2">
+      <div className="flex items-center justify-between px-0.5">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-[#687582]">
+          Corridor Comparison ({routes.length} Available Routes)
         </h2>
-        <span className="text-xs text-slate-400">
-          Click any route card to inspect corridor on map
+        <span className="text-xs text-[#9DA7B2]">
+          Select route to inspect checkpoints & heatmap
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {routes.map((route) => {
           const isSelected = selectedRouteId === route.id;
           const isRec = route.isRecommended;
           const p = route.riskProfile;
-
-          // Route color accents
-          const routeColorClasses =
-            route.index === 1
-              ? "border-cyan-500/40 text-cyan-400"
-              : route.index === 2
-              ? "border-indigo-500/40 text-indigo-400"
-              : "border-amber-500/40 text-amber-400";
+          const accent = ROUTE_ACCENTS[route.index as 1 | 2 | 3] || ROUTE_ACCENTS[1];
 
           // Safety Status Label
-          let safetyLabel = "SAFE FOR TRANSIT";
-          let safetyBg = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+          let safetyLabel = "Safe for Transit";
+          let safetyText = "text-[#16865D]";
+          let safetyBg = "bg-[#EBF6F1] border-[#CBE9DC]";
           let SafetyIcon = ShieldCheck;
 
           if (p.isUnsafe || p.noTravelMiles > 0) {
-            safetyLabel = "NO TRAVEL ADVISORY";
-            safetyBg = "bg-rose-950/60 text-rose-400 border-rose-600/50";
+            safetyLabel = "No Travel Advisory";
+            safetyText = "text-[#861F2D]";
+            safetyBg = "bg-[#F8E9EB] border-[#E5B5BC]";
             SafetyIcon = ShieldAlert;
           } else if (p.severeRiskMiles > 0 || p.highRiskMiles > 0) {
-            safetyLabel = "ADVERSE WEATHER (CAUTION)";
-            safetyBg = "bg-amber-500/15 text-amber-400 border-amber-500/30";
+            safetyLabel = "Adverse Weather";
+            safetyText = "text-[#E47B35]";
+            safetyBg = "bg-[#FDF1E9] border-[#F8D2BA]";
             SafetyIcon = AlertTriangle;
           }
 
@@ -77,128 +73,107 @@ export const RouteComparisonCards: React.FC<RouteComparisonCardsProps> = ({
               key={route.id}
               onClick={() => onSelectRoute(route.id)}
               className={cn(
-                "relative cursor-pointer rounded-2xl border p-5 transition-all duration-200 flex flex-col justify-between",
+                "cursor-pointer rounded-lg border bg-white p-4 transition-all duration-150 flex flex-col justify-between select-none relative",
                 isSelected
-                  ? "bg-slate-900 border-cyan-400/90 shadow-xl shadow-cyan-500/10 ring-2 ring-cyan-500/30"
-                  : "bg-slate-900/60 border-slate-800/90 hover:border-slate-700 hover:bg-slate-900/80 shadow-md",
-                isRec && !isSelected && "border-teal-500/40 bg-teal-950/10"
+                  ? "border-[#087E8B] ring-1 ring-[#087E8B] shadow-card"
+                  : "border-[#E7EBEF] hover:border-[#D4D9DE] hover:shadow-subtle",
+                isRec && !isSelected && "border-[#BCE1E5]"
               )}
             >
-              {/* Header Badges */}
               <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span
-                    className={cn(
-                      "px-2.5 py-0.5 rounded-lg text-xs font-bold border tracking-wide uppercase",
-                      routeColorClasses
-                    )}
-                  >
-                    {route.name}
-                  </span>
+                {/* Header */}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className={cn("h-2 w-2 rounded-full", accent.dot)} />
+                    <span className="text-xs font-semibold text-[#17212B]">
+                      {route.name}
+                    </span>
+                  </div>
 
                   {isRec && (
-                    <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-500/50 px-2.5 py-0.5 text-[11px] font-bold text-teal-300 shadow-sm">
-                      <Award className="h-3.5 w-3.5 text-teal-400" />
-                      RECOMMENDED
+                    <span className="inline-flex items-center gap-1 rounded bg-[#E6F3F5] border border-[#BCE1E5] px-1.5 py-0.5 text-[10px] font-semibold text-[#087E8B]">
+                      <Award className="h-3 w-3" />
+                      Recommended
                     </span>
                   )}
                 </div>
 
-                {/* Route Summary */}
-                <h4 className="text-sm font-semibold text-slate-100 line-clamp-1">
-                  {route.summary || "Main Freight Corridor"}
-                </h4>
-
-                {/* Distance & Travel Time */}
-                <div className="mt-3 grid grid-cols-2 gap-2 pb-3 border-b border-slate-800">
-                  <div className="flex items-center gap-2 text-slate-300">
-                    <Navigation className="h-4 w-4 text-cyan-400" />
-                    <div>
-                      <div className="text-[10px] text-slate-400">Total Distance</div>
-                      <div className="text-sm font-bold font-mono">
-                        {formatDistanceMiles(route.totalDistanceMiles)}
-                      </div>
+                {/* Primary Metrics: Distance & Duration */}
+                <div className="grid grid-cols-2 gap-2 py-2.5 my-1 border-y border-[#F4F5F7]">
+                  <div>
+                    <div className="text-[11px] text-[#687582]">Total Distance</div>
+                    <div className="text-base font-semibold font-mono tabular-nums text-[#17212B]">
+                      {formatDistanceMiles(route.totalDistanceMiles)}
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-2 text-slate-300">
-                    <Clock className="h-4 w-4 text-cyan-400" />
-                    <div>
-                      <div className="text-[10px] text-slate-400">Estimated Duration</div>
-                      <div className="text-sm font-bold font-mono">
-                        {formatDuration(route.totalDurationMinutes)}
-                      </div>
+                  <div>
+                    <div className="text-[11px] text-[#687582]">Duration</div>
+                    <div className="text-base font-semibold font-mono tabular-nums text-[#17212B]">
+                      {formatDuration(route.totalDurationMinutes)}
                     </div>
                   </div>
                 </div>
 
-                {/* Risk Metrics Breakdown */}
-                <div className="mt-3.5 space-y-2">
-                  {/* Severe & No Travel Miles */}
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 flex items-center gap-1">
-                      <span className="h-2 w-2 rounded-full bg-red-500" />
+                {/* Weather Exposure Statistics */}
+                <div className="space-y-1.5 pt-1 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#687582] flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#D94B4B]" />
                       Severe Exposure:
                     </span>
                     <span
                       className={cn(
-                        "font-mono font-bold",
-                        p.severeRiskMiles > 0 ? "text-red-400" : "text-slate-300"
+                        "font-mono tabular-nums font-medium",
+                        p.severeRiskMiles > 0 ? "text-[#D94B4B] font-semibold" : "text-[#17212B]"
                       )}
                     >
                       {p.severeRiskMiles.toFixed(1)} mi
                     </span>
                   </div>
 
-                  {/* High Risk Miles */}
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 flex items-center gap-1">
-                      <span className="h-2 w-2 rounded-full bg-orange-500" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#687582] flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#E47B35]" />
                       High Risk Exposure:
                     </span>
                     <span
                       className={cn(
-                        "font-mono font-bold",
-                        p.highRiskMiles > 0 ? "text-orange-400" : "text-slate-300"
+                        "font-mono tabular-nums font-medium",
+                        p.highRiskMiles > 0 ? "text-[#E47B35] font-semibold" : "text-[#17212B]"
                       )}
                     >
                       {p.highRiskMiles.toFixed(1)} mi
                     </span>
                   </div>
 
-                  {/* No Travel Miles if any */}
                   {p.noTravelMiles > 0 && (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-rose-400 font-bold flex items-center gap-1">
-                        <span className="h-2 w-2 rounded-full bg-rose-600 animate-ping" />
-                        No Travel Miles:
-                      </span>
-                      <span className="font-mono font-black text-rose-400 bg-rose-950/80 px-1.5 py-0.5 rounded border border-rose-600/50">
+                    <div className="flex items-center justify-between bg-[#F8E9EB] px-2 py-0.5 rounded border border-[#E5B5BC]">
+                      <span className="text-[#861F2D] font-medium text-[11px]">No Travel Exposure:</span>
+                      <span className="font-mono tabular-nums font-bold text-[#861F2D]">
                         {p.noTravelMiles.toFixed(1)} mi
                       </span>
                     </div>
                   )}
 
-                  {/* Average Risk Score Meter */}
-                  <div className="pt-2">
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-slate-400">Average Risk Score:</span>
-                      <span className="font-mono font-bold text-slate-200">
+                  {/* Average Risk Meter */}
+                  <div className="pt-1">
+                    <div className="flex items-center justify-between text-[11px] text-[#687582] mb-1">
+                      <span>Average Risk Score</span>
+                      <span className="font-mono tabular-nums font-medium text-[#17212B]">
                         {p.averageRiskScore.toFixed(2)} / 4.00
                       </span>
                     </div>
-                    {/* Visual meter bar */}
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden flex">
+                    <div className="h-1.5 w-full bg-[#E7EBEF] rounded-full overflow-hidden">
                       <div
                         className={cn(
-                          "h-full transition-all duration-300",
+                          "h-full rounded-full transition-all duration-200",
                           p.averageRiskScore < 1
-                            ? "bg-emerald-400"
+                            ? "bg-[#16865D]"
                             : p.averageRiskScore < 2
-                            ? "bg-amber-400"
+                            ? "bg-[#D69B24]"
                             : p.averageRiskScore < 3
-                            ? "bg-orange-400"
-                            : "bg-red-500"
+                            ? "bg-[#E47B35]"
+                            : "bg-[#D94B4B]"
                         )}
                         style={{ width: `${Math.min((p.averageRiskScore / 4) * 100, 100)}%` }}
                       />
@@ -207,17 +182,18 @@ export const RouteComparisonCards: React.FC<RouteComparisonCardsProps> = ({
                 </div>
               </div>
 
-              {/* Footer Safety Status */}
-              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-                <div
+              {/* Card Footer: Status & Max Level */}
+              <div className="mt-3 pt-2.5 border-t border-[#F4F5F7] flex items-center justify-between">
+                <span
                   className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-bold tracking-tight",
-                    safetyBg
+                    "inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded border",
+                    safetyBg,
+                    safetyText
                   )}
                 >
-                  <SafetyIcon className="h-3.5 w-3.5 flex-shrink-0" />
+                  <SafetyIcon className="h-3 w-3" />
                   <span>{safetyLabel}</span>
-                </div>
+                </span>
 
                 <RiskBadge risk={p.maxRiskLevel} size="sm" />
               </div>
